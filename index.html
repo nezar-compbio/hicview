@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <title>Hi-C Canvas</title>
+  <script src="assets/js/d3.v3.min.js"></script>
+  <script src="assets/js/jquery-2.1.1.min.js"></script>
+  <script src="assets/js/jquery.mousewheel.js"></script>
+  <script src="assets/js/jquery.panzoom.min.js"></script>
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css"></link>
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"></link>
+  <!-- <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-theme.min.js"> </link> -->
+</head>
+
+<body>
+  <section>
+    <div class="container">
+      <h1>Ahoy, matey! Choose your Hi-C to sail.</h1>
+      <input type="file" id="fileloader" name="file"/>
+      <div class="hic-window">
+        <div class="panzoom-container">
+            <div class="panzoom">
+              <img class="heatmap pixelated rotated" width="700" height="700">
+            </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="zoom-in">Zoom In</button>
+        <button class="zoom-out">Zoom Out</button>
+        <input type="range" class="zoom-range">
+        <button class="reset">Reset</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="numpyloader.js"></script>
+  <script src="hicvis.js"></script>
+</body>
+
+</html>
