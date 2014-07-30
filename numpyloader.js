@@ -51,7 +51,7 @@ function parseNumpyFileBuffer(buf) {
   };
 }
 
-function loadNumpyArray(url, onload) {
+function ajaxLoadNumpyArray(url, onload) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function(e) {
     var buf = xhr.response; // not responseText

@@ -21,13 +21,13 @@
     <div class="container">
       <h1>Ahoy, matey! Choose your Hi-C to sail.</h1>
       <input type="file" id="fileloader" name="file"/>
-      <div id"example" >
+      <div id="example" >
         <button type="button" onclick="loadExample()">example dataset</button>
       </div>
       <div class="hic-window">
         <div class="panzoom-container">
             <div class="panzoom">
-              <img class="heatmap pixelated rotated" width="700" height="700">
+              <img id="heatmap" class="pixelated rotated" width="700" height="700">
             </div>
         </div>
       </div>
@@ -43,60 +43,61 @@
   <script src="numpyloader.js"></script>
   <script src="hicvis.js"></script>
   <script>
-    function loadExample(){
-      function onExampleLoad(ndarray) {
-        // read file contents
-        var matrix = ndarray.data,
-            lenX = ndarray.shape[0],
-            lenY = ndarray.shape[1];
+    var canvas = document.createElement("canvas");
 
-        // paint the matrix
-        canvas.width = lenX;
-        canvas.height = lenY;
-        imgData = ctx.createImageData(lenX, lenY);
-        for (var i = 0, p = -1; i < lenY; ++i) {
-          for (var j = 0; j < lenX; ++j) {
+    function onLoadMatrix(matrix) {
+      var data = matrix.data,
+          lenX = matrix.shape[0],
+          lenY = matrix.shape[1];
+      // paint the matrix onto the canvas context
+      paintMatrix(canvas, lenX, lenY, data, color)
 
-            var value = matrix[lenY*i + j];
-            
-            var c = d3.rgb(value < 1.0 ? "white" : color(value));
+      // encode the canvas context and embed it in img tag
+      $heatmap = $('#heatmap');
+      $heatmap.attr("src", canvas.toDataURL("image/png"));
 
-            imgData.data[++p] = c.r;
-            imgData.data[++p] = c.g;
-            imgData.data[++p] = c.b;
-            imgData.data[++p] = 255;
-          }
-        }
-        ctx.putImageData(imgData, 0, 0);
+      // resize the bounding window
+      var side = $heatmap.attr("width");
+      var offset = side/Math.sqrt(2) - side/2.0;
+      $hicWindow = $('.hic-window');
+      $hicWindow.css("width", side*Math.sqrt(2));
+      $hicWindow.css("height", side/Math.sqrt(2));
+      $hicWindow.css("visibility", "visible");
 
-        // encode the canvas contents and apply to img tag's src
-        $heatmap = $('.heatmap');
-        $heatmap.attr("src", canvas.toDataURL("image/png"));
-        
-        // resize the bounding window
-        var side = $heatmap.attr("width");
-        var offset = side/Math.sqrt(2) - side/2.0;
-        $hicWindow = $('.hic-window');
-        $hicWindow.css("width", side*Math.sqrt(2));
-        $hicWindow.css("height", side/Math.sqrt(2));
-        $hicWindow.css("visibility", "visible");
+      // apply panzoom
+      (function() {
+        var $section = $('section').first();
+        $section.find('.panzoom').panzoom({
+          $zoomIn: $section.find(".zoom-in"),
+          $zoomOut: $section.find(".zoom-out"),
+          $zoomRange: $section.find(".zoom-range"),
+          $reset: $section.find(".reset"),
+          // more options here
+          maxScale: 10,
+          startTransform: 'translate(145px, -350px)'
+        });
+      })();
+    };
 
-        // apply panzoom
-        (function() {
-          var $section = $('section').first();
-          $section.find('.panzoom').panzoom({
-            $zoomIn: $section.find(".zoom-in"),
-            $zoomOut: $section.find(".zoom-out"),
-            $zoomRange: $section.find(".zoom-range"),
-            $reset: $section.find(".reset"),
-            // more options here
-            maxScale: 10,
-            startTransform: 'translate(145px, -350px)'
-          });
-        })();
+    // File Select button
+    function handleFileSelect(evt) {
+      var file = evt.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function() {
+        // read file contents as array buffer
+        var buf = reader.result;
+        var matrix = parseNumpyFileBuffer(buf);
+        onLoadMatrix(matrix);
       };
-      loadNumpyArray('data/chr22.npy', onExampleLoad);
-    }
+      reader.readAsArrayBuffer(file);
+    };
+    document.getElementById('fileloader')
+        .addEventListener('change', handleFileSelect, false);
+
+    // Load Example button
+    function loadExample(){
+      ajaxLoadNumpyArray('data/chr22.npy', onLoadMatrix);
+    };
   </script>
 </body>
 
