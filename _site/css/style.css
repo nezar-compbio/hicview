@@ -1,0 +1,82 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.copyright {
+    color: #ffffff;
+}
+
+.footer {
+    text-align: center;
+}
+
+.footer a {
+    color: #ee4444;
+}
+
+.sidebar h1 {
+    color: #ee4444;
+    font-size: 1.3em;
+}
+
+.sidebar a {
+    color: #428bca;
+}
+
+.sidebar li {
+    margin-top: .7em;
+    line-height: 1em;
+}
+
+.sidebar a:hover {
+    color: #3071a9;
+}
+
+.container-left {
+    margin: 0;
+}
+
+.well h1 {
+    color: #ee4444;
+    font-size: 1.3em;
+}
+
+.author {
+    color: #ee4444;
+}
+
+.author a {
+    color: #ee4444;
+}
+
+.hic-window {
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.panzoom-container {
+  background-color: gray;
+}
+
+#heatmap {
+  border: 1px solid #000000;
+}
+
+.pixelated {
+  image-rendering:optimizeSpeed;             /* Legal fallback */
+  image-rendering:-moz-crisp-edges;          /* Firefox        */
+  image-rendering:-o-crisp-edges;            /* Opera          */
+  image-rendering:-webkit-optimize-contrast; /* Safari         */
+  image-rendering:optimize-contrast;         /* CSS3 Proposed  */
+  image-rendering:crisp-edges;               /* CSS4 Proposed  */
+  image-rendering:pixelated;                 /* CSS4 Proposed  */
+  -ms-interpolation-mode:nearest-neighbor;   /* IE8+           */
+}
+
+.rotated {
+  -webkit-transform:rotate(-45deg);
+  -moz-transform:rotate(-45deg);
+  -o-transform:rotate(-45deg);
+  -ms-transform:rotate(-45deg);
+}
