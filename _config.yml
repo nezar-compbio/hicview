@@ -1,7 +1,8 @@
 # Jekyll configuration
 
 # Handling Reading
-exclude: ['README.md', 'LICENSE', 'Gemfile', 'Gemfile.lock', 'data']
+include: ['data']
+exclude: ['README.md', 'LICENSE', 'Gemfile', 'Gemfile.lock']
 
 # Conversion
 highlighter: pygments
