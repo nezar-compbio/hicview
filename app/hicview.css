@@ -1,0 +1,39 @@
+.hicview {
+  overflow: hidden;
+  visibility: hidden;
+}
+
+/*
+.panzoom {
+     -webkit-backface-visibility: initial !important;
+     -webkit-transform-origin: 50% 50%;
+ }
+ */
+
+.panzoom-container {
+  background-color: gray;
+}
+
+.heatmap {
+  border: 1px solid #000000;
+  max-width:100%;
+  height: auto;
+}
+
+.pixelated {
+  image-rendering:optimizeSpeed;             /* Legal fallback */
+  image-rendering:optimize-contrast;         /* CSS3 Proposed  */
+  image-rendering:-webkit-optimize-contrast; /* Safari         */
+  image-rendering:crisp-edges;               /* CSS4 Proposed  */
+  image-rendering:-moz-crisp-edges;          /* Firefox        */
+  image-rendering:-o-crisp-edges;            /* Opera          */
+  image-rendering:pixelated;
+  -ms-interpolation-mode:nearest-neighbor;   /* IE8+           */
+}
+
+.rotated {
+  -webkit-transform:rotate(-45deg);
+  -moz-transform:rotate(-45deg);
+  -o-transform:rotate(-45deg);
+  -ms-transform:rotate(-45deg);
+}
