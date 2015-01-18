@@ -15,7 +15,7 @@ paginate_path: /page:num
 timezone: America/New_York
 
 # Serving
-baseurl: ''
+baseurl: '/hicview'
 
 
 # Custom
