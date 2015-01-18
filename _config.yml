@@ -1,0 +1,37 @@
+# Jekyll configuration
+
+# Handling Reading
+exclude: ['README.md', 'LICENSE', 'Gemfile', 'Gemfile.lock', 'data']
+
+# Conversion
+highlighter: pygments
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
+
+# Outputting
+permalink: date  #/:year/:month/:title
+paginate_path: /page:num
+timezone: America/New_York
+
+# Serving
+baseurl: ''
+
+
+# Custom
+name: HiCView
+description: Web-based viewer for High-Resolution Chromatin Conformation Capture heatmaps
+url: http://nezar-compbio.github.io/hicview/
+paginate: 3
+
+# This can be '' to hide the Github nav button
+github: 'nezar-compbio/hicview' 
+
+# Set this to your UA-# value, or '' to disable the block completely
+gaaccount: ''
+
+# Set this to your disqus shortname to enable comments. Note that the 'comments'
+# setting below must also be true. Individual posts can override 'comments' to
+# disable on a post-by-post basis
+disqus: ''
+comments: true

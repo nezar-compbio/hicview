@@ -1,104 +1,40 @@
-<!DOCTYPE html>
-<html>
+---
+layout: default
+---
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Cache-Control" content="no-store" />
-  <title>Hi-C Canvas</title>
-  <script src="assets/js/d3.v3.min.js"></script>
-  <script src="assets/js/jquery-2.1.1.min.js"></script>
-  <script src="assets/js/jquery.mousewheel.js"></script>
-  <script src="assets/js/jquery.panzoom.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<div class="article">
+    <div class="well">
+        <div class="content">
+            <h1>View Hi-C data in your browser!</h1>
 
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css"></link>
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"></link>
-  <!-- <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-theme.min.js"> </link> -->
-</head>
+            <input type="file" id="fileloader" name="file"/>
 
-<body>
-  <section>
-    <div class="container">
-      <h1>Ahoy, matey! Choose your Hi-C to sail.</h1>
-      <input type="file" id="fileloader" name="file"/>
-      <div id="example" >
-        <button type="button" onclick="loadExample()">example dataset</button>
-      </div>
-      <div class="hic-window">
-        <div class="panzoom-container">
-            <div class="panzoom">
-              <img id="heatmap" class="pixelated rotated" width="700" height="700">
+            <div class="hicview">
+              <div class="panzoom-container">
+                  <div class="panzoom">
+                    <img class="heatmap pixelated rotated" width="700" height="700">
+                  </div>
+              </div>
             </div>
+            <div class="panzoom-buttons">
+              <button class="zoom-in">Zoom In</button>
+              <button class="zoom-out">Zoom Out</button>
+              <input type="range" class="zoom-range">
+              <button class="reset">Reset</button>
+            </div>
+
         </div>
-      </div>
-      <div class="buttons">
-        <button class="zoom-in">Zoom In</button>
-        <button class="zoom-out">Zoom Out</button>
-        <input type="range" class="zoom-range">
-        <button class="reset">Reset</button>
-      </div>
     </div>
-  </section>
 
-  <script src="numpyloader.js"></script>
-  <script src="hicvis.js"></script>
-  <script>
-    var canvas = document.createElement("canvas");
+    {% if site.comments == true and site.disqus != '' %}
+      <p class="author"><a href="{{ site.baseurl }}/#disqus_thread">Comments</a></p>
+    {% endif %}
+</div>
 
-    function onLoadMatrix(matrix) {
-      var data = matrix.data,
-          lenX = matrix.shape[0],
-          lenY = matrix.shape[1];
-      // paint the matrix onto the canvas context
-      paintMatrix(canvas, lenX, lenY, data, color)
-
-      // encode the canvas context and embed it in img tag
-      $heatmap = $('#heatmap');
-      $heatmap.attr("src", canvas.toDataURL("image/png"));
-
-      // resize the bounding window
-      var side = $heatmap.attr("width");
-      var offset = side/Math.sqrt(2) - side/2.0;
-      $hicWindow = $('.hic-window');
-      $hicWindow.css("width", side*Math.sqrt(2));
-      $hicWindow.css("height", side/Math.sqrt(2));
-      $hicWindow.css("visibility", "visible");
-
-      // apply panzoom
-      (function() {
-        var $section = $('section').first();
-        $section.find('.panzoom').panzoom({
-          $zoomIn: $section.find(".zoom-in"),
-          $zoomOut: $section.find(".zoom-out"),
-          $zoomRange: $section.find(".zoom-range"),
-          $reset: $section.find(".reset"),
-          // more options here
-          maxScale: 10,
-          startTransform: 'translate(145px, -350px)'
-        });
-      })();
-    };
-
-    // File Select button
-    function handleFileSelect(evt) {
-      var file = evt.target.files[0];
-      var reader = new FileReader();
-      reader.onload = function() {
-        // read file contents as array buffer
-        var buf = reader.result;
-        var matrix = parseNumpyFileBuffer(buf);
-        onLoadMatrix(matrix);
-      };
-      reader.readAsArrayBuffer(file);
-    };
-    document.getElementById('fileloader')
-        .addEventListener('change', handleFileSelect, false);
-
-    // Load Example button
-    function loadExample(){
-      ajaxLoadNumpyArray('data/chr22.npy', onLoadMatrix);
-    };
-  </script>
-</body>
-
-</html>
+<script src="app.js"></script>
+<script>
+  // Load Example button
+  function loadExample(){
+    NumpyLoader.ajax('data/chr22.npy', HiCView.render);
+  };
+</script>
