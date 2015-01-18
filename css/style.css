@@ -50,7 +50,7 @@ body {
     color: #ee4444;
 }
 
-.hic-window {
+.hicview {
   overflow: hidden;
   visibility: hidden;
 }
@@ -59,8 +59,10 @@ body {
   background-color: gray;
 }
 
-#heatmap {
+.heatmap {
   border: 1px solid #000000;
+  max-width:100%;
+  height: auto;
 }
 
 .pixelated {
