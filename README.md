@@ -2,7 +2,7 @@
 
 Javascript Hi-C heatmap visualizer.
 
-This app can load data matrices from local storage in the [NumPy binary format](https://github.com/numpy/numpy/blob/master/doc/neps/npy-format.rst) (.npy) using the HTML5 file API.
+This app can load data matrices from the local file system in the [NumPy binary format](https://github.com/numpy/numpy/blob/master/doc/neps/npy-format.rst) (.npy) using the HTML5 file API.
 
 See Python docs for `np.save()` and `np.load()`.
 
