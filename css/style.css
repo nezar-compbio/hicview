@@ -3,6 +3,10 @@ body {
     padding-bottom: 60px;
 }
 
+.navbar-toggle {
+    float: left;
+}
+
 .copyright {
     color: #ffffff;
 }
