@@ -172,11 +172,13 @@ var HiCView = (function ($) {
         var ctx = canvas.getContext("2d");
 
         // prevent anti-aliasing (still a bug in chrome)
-        ctx.imageSmoothingEnabled = false;
-        ctx.webkitImageSmoothingEnabled = false;
+        // http://html5hub.com/state-of-nearest-neighbor-interpolation-in-canvas/
         ctx.mozImageSmoothingEnabled = false;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.msImageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
 
-        // paint pixels
+        // translate data into pixels
         imgData = ctx.createImageData(lenX, lenY);
         for (var i = 0, p = -1; i < lenY; ++i) {
           for (var j = 0; j < lenX; ++j) {
@@ -185,9 +187,11 @@ var HiCView = (function ($) {
             imgData.data[++p] = c.r;
             imgData.data[++p] = c.g;
             imgData.data[++p] = c.b;
-            imgData.data[++p] = 255;
+            imgData.data[++p] = 255; //alpha
           }
         }
+
+        // put pixels onto the canvas
         ctx.putImageData(imgData, 0, 0);
     }
 
@@ -202,6 +206,8 @@ var HiCView = (function ($) {
         $img = $('.heatmap');
         $img.attr("src", canvas.toDataURL("image/png"));
 
+
+        // The rest of this is setting up the viewer container
         $widget = $('.hicview');
 
         // resize the bounding window
@@ -213,30 +219,64 @@ var HiCView = (function ($) {
 
         // apply panzoom
         (function() {
-            $buttons = $('.panzoom-buttons')
-            $widget.find('.panzoom').panzoom({
-                $zoomIn: $buttons.find(".zoom-in"),
-                $zoomOut: $buttons.find(".zoom-out"),
+            $panzoom = $widget.find('.panzoom');
+            $parent = $panzoom.parent();
+            $buttons = $('.panzoom-buttons');
+            $panzoom.panzoom({
+                //$zoomIn: $buttons.find(".zoom-in"),
+                //$zoomOut: $buttons.find(".zoom-out"),
                 $zoomRange: $buttons.find(".zoom-range"),
                 $reset: $buttons.find(".reset"),
                 // more options here
                 maxScale: 10
                 //startTransform: 'translate(145px, -350px)'
+                // onEnd: function(){
+                //   $widget.panzoom('zoom', {increment: .5});
+                // }
             });
-        })();
-    };
 
-    // File Select button
-    function handleFileSelect(evt) {
-      var file = evt.target.files[0];
-      var reader = new FileReader();
-      reader.onload = function() {
-          // read file contents as array buffer
-          var buf = reader.result;
-          var matrix = NumpyLoader.load(buf);
-          render(matrix);
-      };
-      reader.readAsArrayBuffer(file);
+            // bind buttons
+            // We want to focus zoom on the center of the parent div
+            $zoomIn = $buttons.find(".zoom-in");
+            $zoomIn.on('click', function (e) {
+              // preventDefault cancels future mouse events on touch events
+              e.preventDefault();
+              var width = $parent.width();
+              var height = $parent.height();
+              var offset = $parent.offset();
+              var center = {
+                  clientX: offset.left + width / 2, 
+                  clientY: offset.top + height / 2
+              };
+              $panzoom.panzoom("zoom", false, {focal: center});
+            });
+
+            $zoomOut = $buttons.find(".zoom-out");
+            $zoomOut.on('click', function (e) {
+              e.preventDefault();
+              var width = $parent.width();
+              var height = $parent.height();
+              var offset = $parent.offset();
+              var center = {
+                  clientX: offset.left + width / 2, 
+                  clientY: offset.top + height / 2
+              };
+              $panzoom.panzoom("zoom", true, {focal: center});
+            });
+
+            // mousewhell scroll -> focal zoom
+            $parent.on('mousewheel.focal', function (e) {
+              e.preventDefault();
+              var delta = e.delta || e.originalEvent.wheelDelta;
+              var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+              $panzoom.panzoom('zoom', zoomOut, {
+                increment: 0.1,
+                animate: false,
+                focal: e
+              });
+            });
+
+        })();
     };
 
     self.version = "0.2.0";
