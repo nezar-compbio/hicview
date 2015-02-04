@@ -1,63 +1,14 @@
-body {
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.navbar-toggle {
-    float: left;
-}
-
-.copyright {
-    color: #ffffff;
-}
-
-.footer {
-    text-align: center;
-}
-
-.footer a {
-    color: #ee4444;
-}
-
-.sidebar h1 {
-    color: #ee4444;
-    font-size: 1.3em;
-}
-
-.sidebar a {
-    color: #428bca;
-}
-
-.sidebar li {
-    margin-top: .7em;
-    line-height: 1em;
-}
-
-.sidebar a:hover {
-    color: #3071a9;
-}
-
-.container-left {
-    margin: 0;
-}
-
-.well h1 {
-    color: #ee4444;
-    font-size: 1.3em;
-}
-
-.author {
-    color: #ee4444;
-}
-
-.author a {
-    color: #ee4444;
-}
-
 .hicview {
   overflow: hidden;
   visibility: hidden;
 }
+
+/*
+.panzoom {
+     -webkit-backface-visibility: initial !important;
+     -webkit-transform-origin: 50% 50%;
+ }
+ */
 
 .panzoom-container {
   background-color: gray;
