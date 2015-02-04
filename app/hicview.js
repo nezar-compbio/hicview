@@ -251,84 +251,22 @@ var HiCView = (function ($) {
 })( jQuery );
  
 
-// Client-side parser for .npy files
-var NumpyLoader = (function () {
-    function bytes2ascii(buf) {
-        return String.fromCharCode.apply(null, new Uint8Array(buf));
-    }
-
-    function readUint16LE(buffer) {
-        var view = new DataView(buffer);
-        var val = view.getUint8(0);
-        val |= view.getUint8(1) << 8;
-        return val;
-    }
-
-    function fromFileBuffer(buf) {
-      var magic = bytes2ascii(buf.slice(0,6));
-      if (magic.slice(1,6) != 'NUMPY') {
-          throw new Error('unknown file type');
-      }
-
-      var version = new Uint8Array(buf.slice(6,8)),
-          headerLength = readUint16LE(buf.slice(8,10)),
-          s = bytes2ascii(buf.slice(10, 10+headerLength)),
-          data = buf.slice(10+headerLength);
-
-      // Hacky conversion of dict literal string to JS Object
-      eval("var info = " + s.toLowerCase().replace('(','[').replace('),',']'));
-
-      if (info.descr === "|u1") {
-          data = new Uint8Array(data);
-      } else if (info.descr === "|i1") {
-          data = new Int8Array(data);
-      } else if (info.descr === "<u2") {
-          data = new Uint16Array(data);
-      } else if (info.descr === "<i2") {
-          data = new Int16Array(data);
-      } else if (info.descr === "<u4") {
-          data = new Uint32Array(data);
-      } else if (info.descr === "<i4") {
-          data = new Int32Array(data);
-      } else if (info.descr === "<f4") {
-          data = new Float32Array(data);
-      } else if (info.descr === "<f8") {
-          data = new Float64Array(data);
-      } else {
-          throw new Error('unknown numeric dtype')
-      }
-
-      return {
-          shape: info.shape,
-          fortran_order: info.fortran_order,
-          data: data
-      };
-    }
-
-    function ajax(url, onload) {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function(e) {
-            var buf = xhr.response; // not responseText
-            var ndarray = fromFileBuffer(buf);
-            onload(ndarray);
-        };
-        xhr.open("GET", url, true);
-        xhr.responseType = "arraybuffer";
-        xhr.send(null);
-    }
-
-    return {
-        load: fromFileBuffer,
-        ajax: ajax
-    };
-})();
- 
 
 
 
 
-
-
+// // File Select button
+// function handleFileSelect(evt) {
+//   var file = evt.target.files[0];
+//   var reader = new FileReader();
+//   reader.onload = function() {
+//       // read file contents as array buffer
+//       var buf = reader.result;
+//       var matrix = NumpyLoader.load(buf);
+//       render(matrix);
+//   };
+//   reader.readAsArrayBuffer(file);
+// };
 
 
 
